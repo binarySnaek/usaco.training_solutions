@@ -1,0 +1,33 @@
+/*
+ID: spoonsp1
+TASK: numtri
+LANG: C++
+*/
+#include <bits/stdc++.h>
+#define cout fout
+#define cin fin
+using namespace std;
+string FILENAME = "numtri";
+int main(){
+    ifstream fin(FILENAME+".in");
+    ofstream fout(FILENAME+".out");
+    int n;
+    cin>>n;
+    vector<vector<int>> x(n); //Let x[i][j] be the maximun sum from the top to the jth digit of the ith row (0-indexed)
+    int ans = 0;
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<=i; j++){
+            int a;
+            cin>>a;
+	    //To get a sum, we can get the max sum of the previous number added to our current number.
+	    //To maximize our sum, take the larger max sum of the previous numbers.
+            x[i].push_back(0);
+            if(j!=0) x[i][j]=x[i-1][j-1]; //If we aren't on the very left side, we can go left
+            if(j!=i) x[i][j]=max(x[i][j], x[i-1][j]); //If we aren't on the very right side, we can go right. We use max to take the larger max sum from the two choices
+            x[i][j]+=a;
+            if(i==n-1) ans=max(ans, x[i][j]);
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
+}
