@@ -1,0 +1,62 @@
+/*
+ID: spoonsp1
+TASK: preface
+LANG: C++
+*/
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define cout fout
+#define cin fin
+#define endl '\n'
+typedef long long ll;
+vector<int> ans(7);//ans[0] is number of 'I's, ans[1] is the number of 'V's, etc.
+vector<string> ansc = {"I", "V", "X", "L", "C", "D", "M"};
+string FILENAME = "preface";
+void conv(int i){
+    ans[6]+=i/1000;//If the number is more than 1000, we can subtract as many 1000s as we can from our number and add the number of 1000s we subtract to the number of 'M's
+    i%=1000;
+    ans[4]+=i/900;//Same thing for 900, 500, etc.
+    ans[6]+=i/900;
+    i%=900;
+    ans[5]+=i/500;
+    i%=500;
+    ans[4]+=i/400;
+    ans[5]+=i/400;
+    i%=400;
+    ans[4]+=i/100;
+    i%=100;
+    ans[4]+=i/90;
+    ans[2]+=i/90;
+    i%=90;
+    ans[3]+=i/50;
+    i%=50;
+    ans[3]+=i/40;
+    ans[2]+=i/40;
+    i%=40;
+    ans[2]+=i/10;
+    i%=10;
+    ans[0]+=i/9;
+    ans[2]+=i/9;
+    i%=9;
+    ans[1]+=i/5;
+    i%=5;
+    ans[1]+=i/4;
+    ans[0]+=i/4;
+    i%=4;
+    ans[0]+=i;
+}
+int main(){
+    ifstream fin(FILENAME+".in");
+    ofstream fout(FILENAME+".out");
+    int n;
+    cin>>n;
+    for(int i = 1; i<=n; i++){
+        conv(i);
+    }
+    for(int i = 0; i<7; i++){
+        if(ans[i]!=0) cout<<ansc[i]<<' '<<ans[i]<<'\n';
+    }
+    
+    return 0;
+}
