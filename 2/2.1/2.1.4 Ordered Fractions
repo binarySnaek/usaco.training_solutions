@@ -1,0 +1,34 @@
+/*
+ID: spoonsp1
+TASK: frac1
+LANG: C++
+*/
+#include <bits/stdc++.h>
+using namespace std;
+#define cout fout
+#define cin fin
+string FILENAME = "frac1";
+bool comp(pair<int, int> a, pair<int, int> b){ 
+    return a.first*b.second<a.second*b.first;
+   //Sort fractions in acsending order comparator. Dividing both sides by a.second*b.second would give us a.first/a.second < b.first/b.second
+}
+int main(){
+    ifstream fin(FILENAME+".in");
+    ofstream fout(FILENAME+".out");
+    int n;
+    cin>>n;
+    vector<pair<int, int>> x;
+    for(int j = 1; j<=n; j++){
+        for(int i = 0; i<=j; i++){
+            if(gcd(i, j)==1){ //If i and j have a gcd (greatest common dividend) other than 1, that means that i/j is unsimplified.
+                x.push_back(make_pair(i, j));
+            }
+        }
+    }
+    sort(x.begin(), x.end(), comp); //Sort it using our custom comparator that sorts fractions in acsending order
+    for(auto i : x){
+        cout<<i.first<<"/"<<i.second<<'\n';
+    }
+
+    return 0;
+}
