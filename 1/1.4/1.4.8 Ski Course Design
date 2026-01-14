@@ -1,0 +1,35 @@
+/*
+ID: spoonsp1
+TASK: skidesign
+LANG: C++
+*/
+#include <bits/stdc++.h>
+using namespace std;
+#define cin fin
+#define cout fout
+#define endl '\n'
+string FILENAME = "skidesign";
+int main(){
+    ifstream fin(FILENAME+".in");
+    ofstream fout(FILENAME+".out");
+    int n;
+    cin>>n;
+    vector<int> x(n);
+    for(int i = 0; i<n; i++) cin>>x[i];
+    sort(x.begin(), x.end());//Sort all slopes in acsending order
+    int ans = INT_MAX; //Set ans to "infinity"
+    for(int i = 0; i<=100; i++){//For all ranges i to i+17, we check how much it minimally costs to compress all hills to be of size i to i+17
+	//If a hill is too small, increase it to size i, as adding any more would not be nessecary. If it is too tall, remove it until i+17, as removing any more would not be nessecary.
+        int lower = i; int upper = i+17;
+        int curans = 0;
+        for(int k = 0; k<n; k++){
+            if(x[k]<lower){
+                curans+=(lower-x[k])*(lower-x[k]);//Too low
+            }else if(x[k]>upper){
+                curans+=(x[k]-upper)*(x[k]-upper);//Too high
+            }
+        }
+        ans=min(ans, curans);//Get the minimun answer over all intervals
+    }
+    cout<<ans<<endl;
+}
