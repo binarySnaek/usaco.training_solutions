@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define cin fin
+#define cout fout
+vector<string> prefixes;
+vector<bool> x; //x[i] represents whether it is possible to write the first i characters of the string using the prefixes
+string s = "";
+bool possible(int i){ 
+    //Try every single prefix and try placing it before index i if there is enough space, and see if everything matches.
+    for(auto prefix : prefixes){
+        if(i<prefix.size()) continue; //Not enough place
+        bool prefix_match = true;
+        // ABCD
+        //10101
+        for(int j = i-prefix.size(); j<i; j++){
+            if(s[j]!=prefix[j-i+prefix.size()]){ //If the prefix doesn't match with the array, set prefix_match to false
+                prefix_match = false;
+            }
+        }
+        if(prefix_match){
+            if(x[i-prefix.size()]==true){ //If a prefix can be placed before index i, and it matches, and it is possible to place prefixes all the way up to index i-prefix.size(), then it is possible to place prefixes to index i; get the prefix arrangment of i-prefix.size(), and add on the current prefix to it
+                return true;
+            }
+        }
+    }
+    return false;
+}
+int main(){
+    ifstream fin("prefix.in");
+    ofstream fout("prefix.out");
+    string p;
+    while(cin>>p&&p!="."){
+        prefixes.push_back(p);
+    }
+    while(cin>>p) s+=p;
+    int n = s.size();
+    x.resize(n+1); 
+    x[0]=true;
+    int ans = 0;
+    for(int i = 0; i<=n; i++){
+        if(possible(i)){
+            x[i]=true;
+            ans=i;//Since i in increasing, this would be a new record, and thus we have to update ans, the maximun possible index i.
+        }
+    }
+    cout<<ans<<'\n'; //Convert from 0-indexing to 1-indexing 
+    return 0;
+}
