@@ -1,0 +1,63 @@
+/*
+ID: spoonsp1
+TASK: comehome
+LANG: C++
+*/
+#include <bits/stdc++.h>
+using namespace std;
+#define cin fin
+#define cout fout
+string FILENAME = "comehome";
+typedef long long ll;
+int main(){
+    ifstream fin(FILENAME+".in");
+    ofstream fout(FILENAME+".out");
+    int n;
+    cin>>n;
+    map<char, int> x; //x[i] represents distance to barn from char i 
+    map<char, map<char, int>> paths; //paths[i][j] represents the distance between points i and j, if there is a path
+    //Preset all characters' distance to barn and paths to each other to be "infinity."
+    for(char i = 'A'; i<='Z'; i++){
+        x[i]=INT_MAX;
+    }
+    for(char i = 'a'; i<='z'; i++){
+        x[i]=INT_MAX;
+    }
+    for(int i = 0; i<n; i++){
+        char a, b; int c;
+        cin>>a>>b>>c;
+        if(paths[a][b]) paths[a][b]=min(paths[a][b], c);
+        else paths[a][b]=c;
+        if(paths[b][a]) paths[b][a]=min(paths[b][a], c);
+        else paths[b][a]=c;//If they are two paths connecting the same points, we can ignore the longer one because it will always be less efficient
+    }
+    x['Z']=0; //Point Z is the barn, and thus it is distance 0 from the barn
+    
+    //Djistra's Algorithm
+    priority_queue<pair<int, char>, vector<pair<int, char>>, greater<pair<int, char>>> pq; //An element in this represents {distance from barn, barn identifier}
+    pq.push({0, 'Z'});
+    while(pq.size()){
+        int dist = pq.top().first;
+        char bchar = pq.top().second;
+        pq.pop();
+        if(x[bchar]!=dist) continue;
+        for(auto pnext : paths[bchar]){
+            int next = pnext.first;
+            if(dist+paths[bchar][next]<x[next]){
+                x[next]=dist+paths[bchar][next];
+                pq.push({x[next], next});
+            }
+        }
+    }
+    
+    int ans = x['A'];
+    char besti = 'A';
+    for(char i = 'B'; i<='Y'; i++){
+        if(x[i]<ans){
+            ans=x[i];
+            besti=i;
+        }
+    }
+    cout<<besti<<" "<<ans<<'\n';
+    return 0;
+}
